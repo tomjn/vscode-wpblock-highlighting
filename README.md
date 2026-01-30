@@ -2,7 +2,7 @@
 
 Improves readability of WordPress Gutenberg block markup in HTML and PHP files.
 
-![WP Block Highlighting in action](https://raw.githubusercontent.com/tomjn/vscode-wp-block-highlighting/main/screenshot.png)
+![WP Block Highlighting in action](https://raw.githubusercontent.com/tomjn/vscode-wpblock-highlighting/main/screenshot.png)
 
 ## Features
 
@@ -16,7 +16,7 @@ Improves readability of WordPress Gutenberg block markup in HTML and PHP files.
 - **Block diagnostics** - Warning squiggles for unclosed or orphan blocks
 - **Hover information** - Hover over blocks to see name, depth, and attributes
 
-![Block diagnostics showing unclosed and orphan block warnings](https://raw.githubusercontent.com/tomjn/vscode-wp-block-highlighting/main/screenshot-diagnostics.png)
+![Block diagnostics showing unclosed and orphan block warnings](https://raw.githubusercontent.com/tomjn/vscode-wpblock-highlighting/main/screenshot-diagnostics.png)
 
 ## Supported Block Formats
 
@@ -48,14 +48,14 @@ Improves readability of WordPress Gutenberg block markup in HTML and PHP files.
 
 ## Installation
 
-**[Install from VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=TomJNowell.vscode-wp-block-highlighting)**
+**[Install from VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=TomJNowell.vscode-wpblock-highlighting)**
 
 Or search for "WP Block Highlighting" in the VS Code Extensions view (`Cmd+Shift+X`).
 
 ### From Source
 ```bash
-git clone https://github.com/tomjn/vscode-wp-block-highlighting
-cd vscode-wp-block-highlighting
+git clone https://github.com/tomjn/vscode-wpblock-highlighting
+cd vscode-wpblock-highlighting
 npm install
 npm run compile
 ```
