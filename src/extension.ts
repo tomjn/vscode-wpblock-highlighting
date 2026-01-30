@@ -3,11 +3,14 @@ import { DecorationManager } from './decorationManager';
 import { HighlightProvider } from './highlightProvider';
 import { WordPressBlockFoldingProvider } from './foldingProvider';
 import { WordPressBlockSymbolProvider } from './symbolProvider';
+import { WordPressBlockHoverProvider } from './hoverProvider';
+import { WordPressBlockDiagnosticProvider } from './diagnosticProvider';
 import { findMatchingComment, getBlockPath } from './blockMatcher';
 import { ExtensionConfig } from './types';
 
 let decorationManager: DecorationManager | null = null;
 let highlightProvider: HighlightProvider | null = null;
+let diagnosticProvider: WordPressBlockDiagnosticProvider | null = null;
 let statusBarItem: vscode.StatusBarItem | null = null;
 
 export function activate(context: vscode.ExtensionContext): void {
@@ -30,9 +33,14 @@ export function activate(context: vscode.ExtensionContext): void {
   );
   context.subscriptions.push(statusBarItem);
 
-  // Register folding and symbol providers for configured languages
+  // Register folding, symbol, and hover providers for configured languages
   // Share parse cache with highlight provider for better performance
   const parseResultProvider = (doc: vscode.TextDocument) => highlightProvider!.getParseResult(doc);
+
+  // Initialize diagnostic provider
+  diagnosticProvider = new WordPressBlockDiagnosticProvider(parseResultProvider);
+  context.subscriptions.push({ dispose: () => diagnosticProvider?.dispose() });
+
   for (const language of config.languages) {
     const foldingProvider = vscode.languages.registerFoldingRangeProvider(
       { language },
@@ -46,6 +54,13 @@ export function activate(context: vscode.ExtensionContext): void {
       new WordPressBlockSymbolProvider(parseResultProvider)
     );
     context.subscriptions.push(symbolProvider);
+
+    // Register hover provider for block information
+    const hoverProvider = vscode.languages.registerHoverProvider(
+      { language },
+      new WordPressBlockHoverProvider(parseResultProvider)
+    );
+    context.subscriptions.push(hoverProvider);
   }
 
   // Register jump to matching pair command
@@ -122,6 +137,7 @@ export function activate(context: vscode.ExtensionContext): void {
 export function deactivate(): void {
   decorationManager?.dispose();
   highlightProvider?.dispose();
+  diagnosticProvider?.dispose();
   statusBarItem?.dispose();
 }
 
@@ -242,6 +258,7 @@ function triggerUpdateDecorations(editor: vscode.TextEditor): void {
   updateTimeout = setTimeout(() => {
     highlightProvider?.updateDecorations(editor);
     highlightProvider?.updateMatchHighlight(editor);
+    diagnosticProvider?.updateDiagnostics(editor.document);
     updateStatusBar(editor);
   }, 100);
 }

@@ -2,7 +2,7 @@
 
 Improves readability of WordPress Gutenberg block markup in HTML and PHP files.
 
-![WP Block Highlighting in action](screenshot.png)
+![WP Block Highlighting in action](https://raw.githubusercontent.com/tomjn/vscode-wp-block-highlighting/main/screenshot.png)
 
 ## Features
 
@@ -13,6 +13,10 @@ Improves readability of WordPress Gutenberg block markup in HTML and PHP files.
 - **Jump to matching pair** - `Cmd+Shift+M` (Mac) / `Ctrl+Shift+M` (Windows/Linux)
 - **Breadcrumb navigation** - Shows block hierarchy in VS Code's breadcrumb bar and Outline view
 - **Status bar path** - Shows current block path in status bar (e.g., `group > columns > column`)
+- **Block diagnostics** - Warning squiggles for unclosed or orphan blocks
+- **Hover information** - Hover over blocks to see name, depth, and attributes
+
+![Block diagnostics showing unclosed and orphan block warnings](https://raw.githubusercontent.com/tomjn/vscode-wp-block-highlighting/main/screenshot-diagnostics.png)
 
 ## Supported Block Formats
 
