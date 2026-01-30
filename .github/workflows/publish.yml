@@ -31,4 +31,7 @@ jobs:
         run: npx vsce publish -p ${{ secrets.VSCE_PAT }}
 
       - name: Publish to Open VSX Registry
-        run: npx ovsx publish -p ${{ secrets.OVSX_PAT }}
+        run: |
+          # Open VSX uses namespace 'tomjn', not 'TomJNowell'
+          jq '.publisher = "tomjn"' package.json > package.json.tmp && mv package.json.tmp package.json
+          npx ovsx publish -p ${{ secrets.OVSX_PAT }}
