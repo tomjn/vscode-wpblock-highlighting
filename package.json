@@ -1,9 +1,10 @@
 {
   "name": "vscode-wp-block-highlighting",
-  "displayName": "WordPress Block Highlighting",
+  "displayName": "WP Block Highlighting",
   "description": "Improves readability of WordPress block markup (Gutenberg) in HTML/PHP files",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "publisher": "TomJNowell",
+  "icon": "icon.png",
   "license": "GPL-2.0-or-later",
   "author": {
     "name": "Tom J Nowell",
@@ -39,12 +40,12 @@
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
-      "title": "WordPress Block Highlighting",
+      "title": "WP Block Highlighting",
       "properties": {
         "wpBlockHighlighting.enabled": {
           "type": "boolean",
           "default": true,
-          "description": "Enable WordPress block highlighting"
+          "description": "Enable WP block highlighting"
         },
         "wpBlockHighlighting.depthColors": {
           "type": "array",
@@ -106,8 +107,8 @@
     "commands": [
       {
         "command": "wpBlockHighlighting.jumpToMatchingPair",
-        "title": "Jump to Matching WordPress Block",
-        "category": "WordPress Blocks"
+        "title": "Jump to Matching WP Block",
+        "category": "WP Blocks"
       }
     ],
     "keybindings": [
