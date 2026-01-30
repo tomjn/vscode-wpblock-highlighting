@@ -1,0 +1,126 @@
+{
+  "name": "vscode-wp-block-highlighting",
+  "displayName": "WordPress Block Highlighting",
+  "description": "Improves readability of WordPress block markup (Gutenberg) in HTML/PHP files",
+  "version": "0.1.0",
+  "publisher": "tomjn",
+  "engines": {
+    "vscode": "^1.85.0"
+  },
+  "categories": [
+    "Programming Languages",
+    "Other"
+  ],
+  "keywords": [
+    "wordpress",
+    "gutenberg",
+    "blocks",
+    "highlighting",
+    "php",
+    "html"
+  ],
+  "activationEvents": [
+    "onLanguage:html",
+    "onLanguage:php"
+  ],
+  "main": "./dist/extension.js",
+  "contributes": {
+    "configuration": {
+      "title": "WordPress Block Highlighting",
+      "properties": {
+        "wpBlockHighlighting.enabled": {
+          "type": "boolean",
+          "default": true,
+          "description": "Enable WordPress block highlighting"
+        },
+        "wpBlockHighlighting.depthColors": {
+          "type": "array",
+          "default": [
+            "rgba(51, 102, 204, 0.15)",
+            "rgba(51, 153, 51, 0.15)",
+            "rgba(204, 102, 0, 0.15)",
+            "rgba(153, 51, 204, 0.15)",
+            "rgba(204, 51, 102, 0.15)",
+            "rgba(51, 153, 153, 0.15)"
+          ],
+          "description": "Background colors for different nesting depths"
+        },
+        "wpBlockHighlighting.matchHighlightColor": {
+          "type": "string",
+          "default": "rgba(255, 204, 0, 0.2)",
+          "description": "Background color for matching block pairs"
+        },
+        "wpBlockHighlighting.matchNameHighlightColor": {
+          "type": "string",
+          "default": "#ffcc00",
+          "description": "Text color for wp:block-name in matching pairs"
+        },
+        "wpBlockHighlighting.blockNameColor": {
+          "type": "string",
+          "default": "#569cd6",
+          "description": "Color for block names (not used if syntax highlighting provides color)"
+        },
+        "wpBlockHighlighting.jsonKeyColor": {
+          "type": "string",
+          "default": "#9cdcfe",
+          "description": "Color for JSON property keys in block attributes"
+        },
+        "wpBlockHighlighting.jsonStringColor": {
+          "type": "string",
+          "default": "#ce9178",
+          "description": "Color for JSON string values in block attributes"
+        },
+        "wpBlockHighlighting.jsonNumberColor": {
+          "type": "string",
+          "default": "#b5cea8",
+          "description": "Color for JSON numbers and booleans in block attributes"
+        },
+        "wpBlockHighlighting.jsonBracketColor": {
+          "type": "string",
+          "default": "#ffd700",
+          "description": "Color for JSON brackets {} [] in block attributes"
+        },
+        "wpBlockHighlighting.languages": {
+          "type": "array",
+          "default": [
+            "html",
+            "php"
+          ],
+          "description": "Languages to activate highlighting for"
+        }
+      }
+    },
+    "commands": [
+      {
+        "command": "wpBlockHighlighting.jumpToMatchingPair",
+        "title": "Jump to Matching WordPress Block",
+        "category": "WordPress Blocks"
+      }
+    ],
+    "keybindings": [
+      {
+        "command": "wpBlockHighlighting.jumpToMatchingPair",
+        "key": "ctrl+shift+m",
+        "mac": "cmd+shift+m",
+        "when": "editorTextFocus"
+      }
+    ]
+  },
+  "scripts": {
+    "vscode:prepublish": "npm run compile",
+    "compile": "node esbuild.js",
+    "watch": "node esbuild.js --watch",
+    "test": "node --import tsx --test test/suite/*.test.ts",
+    "lint": "eslint src --ext ts"
+  },
+  "devDependencies": {
+    "@types/node": "^20.10.0",
+    "@types/vscode": "^1.85.0",
+    "@typescript-eslint/eslint-plugin": "^6.13.0",
+    "@typescript-eslint/parser": "^6.13.0",
+    "esbuild": "^0.19.8",
+    "eslint": "^8.55.0",
+    "tsx": "^4.7.0",
+    "typescript": "^5.3.2"
+  }
+}
