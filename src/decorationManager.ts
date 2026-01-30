@@ -74,6 +74,9 @@ export class DecorationManager {
   }
 
   public getDepthDecoration(depth: number): vscode.TextEditorDecorationType {
+    if (this.depthDecorations.length === 0) {
+      throw new Error('No depth decorations available. Ensure depthColors is not empty.');
+    }
     const index = depth % this.depthDecorations.length;
     return this.depthDecorations[index];
   }

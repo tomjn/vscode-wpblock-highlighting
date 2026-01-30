@@ -1,14 +1,22 @@
 import * as vscode from 'vscode';
 import { buildBlockTree } from './blockMatcher';
-import { BlockPair } from './types';
+import { BlockPair, ParseResult } from './types';
+
+export type ParseResultProvider = (document: vscode.TextDocument) => ParseResult;
 
 export class WordPressBlockFoldingProvider implements vscode.FoldingRangeProvider {
+  private getParseResult: ParseResultProvider;
+
+  constructor(parseResultProvider?: ParseResultProvider) {
+    this.getParseResult = parseResultProvider ?? buildBlockTree;
+  }
+
   provideFoldingRanges(
     document: vscode.TextDocument,
     _context: vscode.FoldingContext,
     _token: vscode.CancellationToken
   ): vscode.ProviderResult<vscode.FoldingRange[]> {
-    const parseResult = buildBlockTree(document);
+    const parseResult = this.getParseResult(document);
     const foldingRanges: vscode.FoldingRange[] = [];
 
     for (const pair of parseResult.pairs) {

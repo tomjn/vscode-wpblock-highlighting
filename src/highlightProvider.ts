@@ -57,12 +57,19 @@ export class HighlightProvider {
   }
 
   public getParseResult(document: vscode.TextDocument): ParseResult {
-    const key = document.uri.toString();
+    const key = `${document.uri.toString()}:${document.version}`;
     const cached = this.parseCache.get(key);
 
-    // Simple cache - in production, would also check document version
     if (cached) {
       return cached;
+    }
+
+    // Clear old versions of this document from cache
+    const uriPrefix = document.uri.toString() + ':';
+    for (const cacheKey of this.parseCache.keys()) {
+      if (cacheKey.startsWith(uriPrefix)) {
+        this.parseCache.delete(cacheKey);
+      }
     }
 
     const result = buildBlockTree(document);

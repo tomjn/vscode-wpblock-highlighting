@@ -30,10 +30,12 @@ export function activate(context: vscode.ExtensionContext): void {
   context.subscriptions.push(statusBarItem);
 
   // Register folding provider for configured languages
+  // Share parse cache with highlight provider for better performance
+  const parseResultProvider = (doc: vscode.TextDocument) => highlightProvider!.getParseResult(doc);
   for (const language of config.languages) {
     const foldingProvider = vscode.languages.registerFoldingRangeProvider(
       { language },
-      new WordPressBlockFoldingProvider()
+      new WordPressBlockFoldingProvider(parseResultProvider)
     );
     context.subscriptions.push(foldingProvider);
   }
@@ -53,7 +55,8 @@ export function activate(context: vscode.ExtensionContext): void {
   // Listen for active editor changes
   const editorChangeListener = vscode.window.onDidChangeActiveTextEditor(
     (editor) => {
-      if (editor && isLanguageSupported(editor.document.languageId, config)) {
+      const currentConfig = getConfig();
+      if (editor && isLanguageSupported(editor.document.languageId, currentConfig)) {
         triggerUpdateDecorations(editor);
       }
     }
@@ -64,10 +67,11 @@ export function activate(context: vscode.ExtensionContext): void {
   const documentChangeListener = vscode.workspace.onDidChangeTextDocument(
     (event) => {
       const editor = vscode.window.activeTextEditor;
+      const currentConfig = getConfig();
       if (
         editor &&
         event.document === editor.document &&
-        isLanguageSupported(editor.document.languageId, config)
+        isLanguageSupported(editor.document.languageId, currentConfig)
       ) {
         highlightProvider?.invalidateCache(event.document);
         triggerUpdateDecorations(editor);
@@ -79,9 +83,10 @@ export function activate(context: vscode.ExtensionContext): void {
   // Listen for selection changes (for match highlighting)
   const selectionChangeListener = vscode.window.onDidChangeTextEditorSelection(
     (event) => {
+      const currentConfig = getConfig();
       if (
         event.textEditor &&
-        isLanguageSupported(event.textEditor.document.languageId, config)
+        isLanguageSupported(event.textEditor.document.languageId, currentConfig)
       ) {
         highlightProvider?.updateMatchHighlight(event.textEditor);
         updateStatusBar(event.textEditor);
@@ -112,27 +117,106 @@ export function deactivate(): void {
   statusBarItem?.dispose();
 }
 
+const DEFAULT_DEPTH_COLORS = [
+  'rgba(51, 102, 204, 0.15)',
+  'rgba(51, 153, 51, 0.15)',
+  'rgba(204, 102, 0, 0.15)',
+  'rgba(153, 51, 204, 0.15)',
+  'rgba(204, 51, 102, 0.15)',
+  'rgba(51, 153, 153, 0.15)',
+];
+
+const COLOR_PATTERN = /^(#[0-9a-fA-F]{3,8}|rgba?\(\s*\d{1,3}\s*,\s*\d{1,3}\s*,\s*\d{1,3}\s*(,\s*[\d.]+\s*)?\))$/;
+
+function isValidColor(color: unknown): color is string {
+  return typeof color === 'string' && COLOR_PATTERN.test(color);
+}
+
+function validateColors(colors: unknown[], defaults: string[], configName: string): string[] {
+  if (!Array.isArray(colors) || colors.length === 0) {
+    console.warn(`wpBlockHighlighting: ${configName} is empty or invalid, using defaults`);
+    return defaults;
+  }
+
+  const validColors = colors.filter((c): c is string => {
+    if (!isValidColor(c)) {
+      console.warn(`wpBlockHighlighting: Invalid color "${c}" in ${configName}, skipping`);
+      return false;
+    }
+    return true;
+  });
+
+  if (validColors.length === 0) {
+    console.warn(`wpBlockHighlighting: No valid colors in ${configName}, using defaults`);
+    return defaults;
+  }
+
+  return validColors;
+}
+
+function validateColor(color: unknown, defaultColor: string, configName: string): string {
+  if (!isValidColor(color)) {
+    console.warn(`wpBlockHighlighting: Invalid ${configName} "${color}", using default`);
+    return defaultColor;
+  }
+  return color;
+}
+
 function getConfig(): ExtensionConfig {
   const config = vscode.workspace.getConfiguration('wpBlockHighlighting');
 
+  const rawDepthColors = config.get<string[]>('depthColors', DEFAULT_DEPTH_COLORS);
+  const depthColors = validateColors(rawDepthColors, DEFAULT_DEPTH_COLORS, 'depthColors');
+
+  const rawLanguages = config.get<string[]>('languages', ['html', 'php']);
+  const languages = Array.isArray(rawLanguages) && rawLanguages.length > 0
+    ? rawLanguages.filter((l): l is string => typeof l === 'string' && l.length > 0)
+    : ['html', 'php'];
+
+  if (languages.length === 0) {
+    console.warn('wpBlockHighlighting: No valid languages configured, using defaults');
+    languages.push('html', 'php');
+  }
+
   return {
     enabled: config.get('enabled', true),
-    depthColors: config.get('depthColors', [
-      'rgba(51, 102, 204, 0.15)',
-      'rgba(51, 153, 51, 0.15)',
-      'rgba(204, 102, 0, 0.15)',
-      'rgba(153, 51, 204, 0.15)',
-      'rgba(204, 51, 102, 0.15)',
-      'rgba(51, 153, 153, 0.15)',
-    ]),
-    matchHighlightColor: config.get('matchHighlightColor', 'rgba(255, 204, 0, 0.2)'),
-    matchNameHighlightColor: config.get('matchNameHighlightColor', '#ffcc00'),
-    blockNameColor: config.get('blockNameColor', '#569cd6'),
-    jsonKeyColor: config.get('jsonKeyColor', '#9cdcfe'),
-    jsonStringColor: config.get('jsonStringColor', '#ce9178'),
-    jsonNumberColor: config.get('jsonNumberColor', '#b5cea8'),
-    jsonBracketColor: config.get('jsonBracketColor', '#ffd700'),
-    languages: config.get('languages', ['html', 'php']),
+    depthColors,
+    matchHighlightColor: validateColor(
+      config.get('matchHighlightColor'),
+      'rgba(255, 204, 0, 0.2)',
+      'matchHighlightColor'
+    ),
+    matchNameHighlightColor: validateColor(
+      config.get('matchNameHighlightColor'),
+      '#ffcc00',
+      'matchNameHighlightColor'
+    ),
+    blockNameColor: validateColor(
+      config.get('blockNameColor'),
+      '#569cd6',
+      'blockNameColor'
+    ),
+    jsonKeyColor: validateColor(
+      config.get('jsonKeyColor'),
+      '#9cdcfe',
+      'jsonKeyColor'
+    ),
+    jsonStringColor: validateColor(
+      config.get('jsonStringColor'),
+      '#ce9178',
+      'jsonStringColor'
+    ),
+    jsonNumberColor: validateColor(
+      config.get('jsonNumberColor'),
+      '#b5cea8',
+      'jsonNumberColor'
+    ),
+    jsonBracketColor: validateColor(
+      config.get('jsonBracketColor'),
+      '#ffd700',
+      'jsonBracketColor'
+    ),
+    languages,
   };
 }
 
