@@ -56,18 +56,48 @@ export class WordPressBlockSymbolProvider implements vscode.DocumentSymbolProvid
     const fullRange = new vscode.Range(startPos, endPos);
     const selectionRange = pair.opening.nameRange;
 
-    // Create the symbol with an appropriate icon
+    // Recursively get children first so we know if this block has any
+    const children = this.convertPairsToSymbols(pair.children, document);
+
+    // Choose icon based on block type
+    const symbolKind = this.getSymbolKind(displayName, children.length > 0);
+
+    // Create the symbol
     const symbol = new vscode.DocumentSymbol(
       displayName,
       blockName !== displayName ? blockName : '', // Show full name as detail if different
-      vscode.SymbolKind.Class, // Class icon for block components
+      symbolKind,
       fullRange,
       selectionRange
     );
 
-    // Recursively add children
-    symbol.children = this.convertPairsToSymbols(pair.children, document);
+    symbol.children = children;
 
     return symbol;
+  }
+
+  private getSymbolKind(blockName: string, hasChildren: boolean): vscode.SymbolKind {
+    // Paragraph blocks - use Field (simple text-like)
+    if (blockName === 'paragraph') {
+      return vscode.SymbolKind.Field;
+    }
+
+    // Quote blocks - use String (text/quote-like)
+    if (blockName === 'quote' || blockName === 'pullquote') {
+      return vscode.SymbolKind.String;
+    }
+
+    // Navigation/menu blocks - use Enum (list-like)
+    if (blockName === 'navigation' || blockName === 'navigation-link' || blockName === 'nav' || blockName === 'menu') {
+      return vscode.SymbolKind.Enum;
+    }
+
+    // Blocks with children - use Namespace (container/hierarchy)
+    if (hasChildren) {
+      return vscode.SymbolKind.Namespace;
+    }
+
+    // Everything else - use Property
+    return vscode.SymbolKind.Property;
   }
 }

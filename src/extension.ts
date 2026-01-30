@@ -256,7 +256,7 @@ function updateStatusBar(editor: vscode.TextEditor): void {
 
   if (path.length > 0) {
     statusBarItem.text = `$(symbol-class) ${path.join(' > ')}`;
-    statusBarItem.tooltip = 'WordPress Block Path';
+    statusBarItem.tooltip = 'WP Block Path';
     statusBarItem.show();
   } else {
     statusBarItem.hide();
