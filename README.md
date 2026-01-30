@@ -44,6 +44,10 @@ Improves readability of WordPress Gutenberg block markup in HTML and PHP files.
 
 ## Installation
 
+**[Install from VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=TomJNowell.vscode-wp-block-highlighting)**
+
+Or search for "WP Block Highlighting" in the VS Code Extensions view (`Cmd+Shift+X`).
+
 ### From Source
 ```bash
 git clone https://github.com/tomjn/vscode-wp-block-highlighting
