@@ -12,3 +12,6 @@ tsconfig.json
 *.vsix
 .DS_Store
 coverage/**
+.claude/**
+CLAUDE.md
+.github/**

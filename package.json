@@ -4,6 +4,19 @@
   "description": "Improves readability of WordPress block markup (Gutenberg) in HTML/PHP files",
   "version": "0.1.0",
   "publisher": "tomjn",
+  "license": "GPL-2.0-or-later",
+  "author": {
+    "name": "Tom J Nowell",
+    "url": "https://tomjn.com"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tomjn/vscode-wp-block-highlighting.git"
+  },
+  "homepage": "https://github.com/tomjn/vscode-wp-block-highlighting#readme",
+  "bugs": {
+    "url": "https://github.com/tomjn/vscode-wp-block-highlighting/issues"
+  },
   "engines": {
     "vscode": "^1.85.0"
   },
@@ -114,6 +127,8 @@
     "lint": "eslint src --ext ts"
   },
   "devDependencies": {
+    "@vscode/vsce": "^3.0.0",
+    "ovsx": "^0.9.0",
     "@types/node": "^20.10.0",
     "@types/vscode": "^1.85.0",
     "@typescript-eslint/eslint-plugin": "^6.13.0",
