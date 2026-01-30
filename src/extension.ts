@@ -2,6 +2,7 @@ import * as vscode from 'vscode';
 import { DecorationManager } from './decorationManager';
 import { HighlightProvider } from './highlightProvider';
 import { WordPressBlockFoldingProvider } from './foldingProvider';
+import { WordPressBlockSymbolProvider } from './symbolProvider';
 import { findMatchingComment, getBlockPath } from './blockMatcher';
 import { ExtensionConfig } from './types';
 
@@ -29,7 +30,7 @@ export function activate(context: vscode.ExtensionContext): void {
   );
   context.subscriptions.push(statusBarItem);
 
-  // Register folding provider for configured languages
+  // Register folding and symbol providers for configured languages
   // Share parse cache with highlight provider for better performance
   const parseResultProvider = (doc: vscode.TextDocument) => highlightProvider!.getParseResult(doc);
   for (const language of config.languages) {
@@ -38,6 +39,13 @@ export function activate(context: vscode.ExtensionContext): void {
       new WordPressBlockFoldingProvider(parseResultProvider)
     );
     context.subscriptions.push(foldingProvider);
+
+    // Register symbol provider for breadcrumb navigation and Outline view
+    const symbolProvider = vscode.languages.registerDocumentSymbolProvider(
+      { language },
+      new WordPressBlockSymbolProvider(parseResultProvider)
+    );
+    context.subscriptions.push(symbolProvider);
   }
 
   // Register jump to matching pair command

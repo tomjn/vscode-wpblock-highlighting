@@ -11,7 +11,8 @@ Improves readability of WordPress Gutenberg block markup in HTML and PHP files.
 - **JSON syntax highlighting** - Block attributes display with proper JSON colors (keys, strings, numbers, brackets)
 - **Block folding** - Collapse/expand WordPress block regions
 - **Jump to matching pair** - `Cmd+Shift+M` (Mac) / `Ctrl+Shift+M` (Windows/Linux)
-- **Status bar breadcrumb** - Shows current block path (e.g., `group > columns > column`)
+- **Breadcrumb navigation** - Shows block hierarchy in VS Code's breadcrumb bar and Outline view
+- **Status bar path** - Shows current block path in status bar (e.g., `group > columns > column`)
 
 ## Supported Block Formats
 
