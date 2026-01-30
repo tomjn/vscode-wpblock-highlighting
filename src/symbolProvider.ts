@@ -60,7 +60,7 @@ export class WordPressBlockSymbolProvider implements vscode.DocumentSymbolProvid
     const symbol = new vscode.DocumentSymbol(
       displayName,
       blockName !== displayName ? blockName : '', // Show full name as detail if different
-      vscode.SymbolKind.Module, // Module icon looks like a block/component
+      vscode.SymbolKind.Class, // Class icon for block components
       fullRange,
       selectionRange
     );

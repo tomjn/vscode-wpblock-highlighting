@@ -40,7 +40,7 @@
   "main": "./dist/extension.js",
   "contributes": {
     "configuration": {
-      "title": "WP Block Highlighting",
+      "title": "WP Blocks",
       "properties": {
         "wpBlockHighlighting.enabled": {
           "type": "boolean",
