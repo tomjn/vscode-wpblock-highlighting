@@ -33,3 +33,13 @@ JSON attributes use a balanced brace matching algorithm (not regex) to handle ar
 ## Adding New Features
 - New decorations: Add to `DecorationManager`, expose via getter, apply in `HighlightProvider`
 - New config: Add to `package.json` contributes.configuration, `types.ts`, and `extension.ts` getConfig()
+
+## Releasing New Versions
+**Always** follow these steps when tagging a new version:
+1. Update version in `package.json`
+2. Update `CHANGELOG.md` with the new version and changes (follow Keep a Changelog format)
+3. Commit the changes
+4. Create the git tag (e.g., `git tag v1.0.7`)
+5. Push commit and tag (`git push && git push --tags`)
+
+**Never** modify or move tags once pushed. If a fix is needed after tagging, create a new version instead.
