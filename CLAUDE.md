@@ -11,7 +11,7 @@ npm run watch     # Watch mode for development
 Press F5 to launch Extension Development Host, open `test/fixtures/sample-blocks.html`.
 
 ## Architecture
-- `src/blockParser.ts` - Regex parsing of WordPress block comments. JSON pattern handles up to 2 levels of nested braces.
+- `src/blockParser.ts` - Parses WordPress block comments using regex for block start detection and balanced brace matching for JSON attributes.
 - `src/blockMatcher.ts` - Stack-based tree builder, pairs opening/closing blocks, calculates depth.
 - `src/decorationManager.ts` - Creates VS Code decoration types for depth colors, match highlighting, JSON tokens.
 - `src/highlightProvider.ts` - Applies decorations to editor, manages parse cache.
@@ -23,11 +23,8 @@ WordPress blocks are HTML comments with specific format - NOT arbitrary HTML par
 - Closing: `<!-- /wp:namespace/block-name -->`
 - Self-closing: `<!-- wp:block-name {"attrs"} /-->`
 
-## Regex Notes
-The JSON_PATTERN uses balanced brace matching (not `[\s\S]*?`) to prevent cross-line matching issues:
-```javascript
-const JSON_PATTERN = '\\{(?:[^{}]|\\{(?:[^{}]|\\{[^{}]*\\})*\\})*\\}';
-```
+## JSON Parsing Notes
+JSON attributes use a balanced brace matching algorithm (not regex) to handle arbitrarily deep nesting. This supports complex WordPress theme attributes like twentytwentyfive's deeply nested style objects.
 
 ## Adding New Features
 - New decorations: Add to `DecorationManager`, expose via getter, apply in `HighlightProvider`

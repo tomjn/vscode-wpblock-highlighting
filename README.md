@@ -1,6 +1,8 @@
-# WordPress Block Highlighting for VS Code
+# WP Block Highlighting for VS Code
 
 Improves readability of WordPress Gutenberg block markup in HTML and PHP files.
+
+![WP Block Highlighting in action](screenshot.png)
 
 ## Features
 
