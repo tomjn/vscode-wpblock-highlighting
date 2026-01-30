@@ -2,7 +2,7 @@
   "name": "vscode-wp-block-highlighting",
   "displayName": "WordPress Block Highlighting",
   "description": "Improves readability of WordPress block markup (Gutenberg) in HTML/PHP files",
-  "version": "1.0.2",
+  "version": "1.0.3",
   "publisher": "TomJNowell",
   "license": "GPL-2.0-or-later",
   "author": {
