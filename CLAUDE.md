@@ -1,5 +1,9 @@
 # Claude Code Instructions
 
+## Repository
+- **GitHub**: `tomjn/vscode-wpblock-highlighting` (note: no hyphen between "wp" and "block")
+- **Raw content URL base**: `https://raw.githubusercontent.com/tomjn/vscode-wpblock-highlighting/main/`
+
 ## Build & Test
 ```bash
 npm run compile    # Build with esbuild
