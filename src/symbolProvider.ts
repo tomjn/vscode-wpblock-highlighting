@@ -77,27 +77,41 @@ export class WordPressBlockSymbolProvider implements vscode.DocumentSymbolProvid
   }
 
   private getSymbolKind(blockName: string, hasChildren: boolean): vscode.SymbolKind {
-    // Paragraph blocks - use Field (simple text-like)
-    if (blockName === 'paragraph') {
-      return vscode.SymbolKind.Field;
-    }
+    const name = blockName.toLowerCase();
 
-    // Quote blocks - use String (text/quote-like)
-    if (blockName === 'quote' || blockName === 'pullquote') {
+    // Paragraph and text blocks - use Field (simple text-like)
+    if (name === 'paragraph' || name === 'post-content' || name === 'verse' || name === 'preformatted' || name === 'code') {
       return vscode.SymbolKind.String;
     }
 
-    // Navigation/menu blocks - use Enum (list-like)
-    if (blockName === 'navigation' || blockName === 'navigation-link' || blockName === 'nav' || blockName === 'menu') {
-      return vscode.SymbolKind.Enum;
+    // Quote blocks - use String (text/quote-like)
+    if (name === 'quote' || name === 'pullquote') {
+      return vscode.SymbolKind.String;
     }
 
-    // Blocks with children - use Namespace (container/hierarchy)
-    if (hasChildren) {
-      return vscode.SymbolKind.Namespace;
+    // Headings
+    if (name === 'heading' || name === 'post-title') {
+      return vscode.SymbolKind.Number;
     }
 
-    // Everything else - use Property
-    return vscode.SymbolKind.Property;
+    // Navigation/menu blocks
+    if (name === 'navigation' || name === 'navigation-link' || name === 'nav' || name === 'menu' || name === 'page-list') {
+      return vscode.SymbolKind.Constant;
+    }
+
+    // Container/layout blocks
+    if (name === 'group' || name === 'columns' || name === 'column' || name === 'cover' ||
+        name === 'row' || name === 'stack' || name === 'media-text' || name === 'buttons' ||
+        name === 'list' || name === 'list-item' || hasChildren) {
+      return vscode.SymbolKind.Struct;
+    }
+
+    // Patterns and template blocks
+    if (name === 'pattern' || name === 'template') {
+      return vscode.SymbolKind.Interface;
+    }
+
+    // Everything else
+    return vscode.SymbolKind.Variable;
   }
 }
