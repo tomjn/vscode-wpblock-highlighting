@@ -4,6 +4,22 @@ Improves readability of WordPress Gutenberg block markup in HTML and PHP files.
 
 ![WP Block Highlighting in action](https://raw.githubusercontent.com/tomjn/vscode-wpblock-highlighting/main/screenshot.png)
 
+## Installation
+
+**[Install from VS Code Marketplace]([https://marketplace.visualstudio.com/items?itemName=TomJNowell.vscode-wpblock-highlighting](https://marketplace.visualstudio.com/items?itemName=TomJNowell.vscode-wp-block-highlighting))**
+
+Or search for "WP Block Highlighting" in the VS Code Extensions view (`Cmd+Shift+X`).
+
+### From Source
+```bash
+git clone https://github.com/tomjn/vscode-wpblock-highlighting
+cd vscode-wpblock-highlighting
+npm install
+npm run compile
+```
+
+Then press F5 in VS Code to test, or package with `vsce package`.
+
 ## Features
 
 - **Depth-based highlighting** - Different background colors for each nesting level
@@ -17,20 +33,6 @@ Improves readability of WordPress Gutenberg block markup in HTML and PHP files.
 - **Hover information** - Hover over blocks to see name, depth, and attributes
 
 ![Block diagnostics showing unclosed and orphan block warnings](https://raw.githubusercontent.com/tomjn/vscode-wpblock-highlighting/main/screenshot-diagnostics.png)
-
-## Supported Block Formats
-
-```html
-<!-- wp:paragraph {"fontSize":"large"} -->
-<p>Content here</p>
-<!-- /wp:paragraph -->
-
-<!-- wp:spacer {"height":"50px"} /-->
-
-<!-- wp:acf/custom-block {"data":{"field":"value"}} -->
-<div>ACF block content</div>
-<!-- /wp:acf/custom-block -->
-```
 
 ## Configuration
 
@@ -46,21 +48,6 @@ Improves readability of WordPress Gutenberg block markup in HTML and PHP files.
 | `wpBlockHighlighting.jsonBracketColor` | `#ffd700` | JSON bracket color |
 | `wpBlockHighlighting.languages` | `["html", "php"]` | Languages to activate for |
 
-## Installation
-
-**[Install from VS Code Marketplace](https://marketplace.visualstudio.com/items?itemName=TomJNowell.vscode-wpblock-highlighting)**
-
-Or search for "WP Block Highlighting" in the VS Code Extensions view (`Cmd+Shift+X`).
-
-### From Source
-```bash
-git clone https://github.com/tomjn/vscode-wpblock-highlighting
-cd vscode-wpblock-highlighting
-npm install
-npm run compile
-```
-
-Then press F5 in VS Code to test, or package with `vsce package`.
 
 ## License
 
