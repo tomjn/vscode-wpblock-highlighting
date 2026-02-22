@@ -2,7 +2,7 @@
   "name": "vscode-wp-block-highlighting",
   "displayName": "WP Block Highlighting",
   "description": "Improves readability of WordPress block markup (Gutenberg) in HTML/PHP files",
-  "version": "1.0.6",
+  "version": "1.0.7",
   "publisher": "TomJNowell",
   "icon": "icon.png",
   "license": "GPL-2.0-or-later",
@@ -12,11 +12,11 @@
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/tomjn/vscode-wp-block-highlighting.git"
+    "url": "https://github.com/tomjn/vscode-wpblock-highlighting.git"
   },
-  "homepage": "https://github.com/tomjn/vscode-wp-block-highlighting#readme",
+  "homepage": "https://github.com/tomjn/vscode-wpblock-highlighting#readme",
   "bugs": {
-    "url": "https://github.com/tomjn/vscode-wp-block-highlighting/issues"
+    "url": "https://github.com/tomjn/vscode-wpblock-highlighting/issues"
   },
   "engines": {
     "vscode": "^1.85.0"
